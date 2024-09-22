@@ -1,8 +1,8 @@
 const Form = () => {
     return (
-        <div>
+        <article className='bg-app-bg'>
             Form
-        </div>
+        </article>
     );
 }
 
