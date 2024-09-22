@@ -5,7 +5,21 @@ export default {
     "./src/**/*.{js,ts,jsx,tsx}",
   ],
   theme: {
-    extend: {},
+    extend: {
+      colors:{
+        'blue-wave': '#00B2FFCC',
+        'white-wave': '#FFFFFF33',
+        'app-bg': '#19274A',
+        'app-btn': '#EF4343'
+      },
+      fontFamily: {
+        body: ['"PT Sans"'],
+      },
+      width: {
+        'blue-waves':'600px',
+        'white-waves': '800px'
+      }
+    },
   },
   plugins: [],
 }
