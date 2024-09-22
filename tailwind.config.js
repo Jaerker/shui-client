@@ -13,7 +13,7 @@ export default {
         'app-btn': '#EF4343'
       },
       fontFamily: {
-        body: ['"PT Sans"'],
+        body: ['"PT Sans"', 'system-ui'],
       },
       width: {
         'blue-waves':'600px',
