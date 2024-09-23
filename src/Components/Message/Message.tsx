@@ -5,7 +5,6 @@ import MessageBottomPart from '../../Assets/message-bottom-part.svg';
 type Props = {
     key: string,
     message: MessageModel;
-    writable?: boolean;
 }
 
 const Day = [
@@ -34,8 +33,7 @@ const Month = [
 ]
 
 const Message = (props: Props) => {
-    const {message, writable} = props;
-    const [editMode, setEditMode] = useState(writable);
+    const {message} = props;
     const [createdDate, setCreatedDate]  = useState('');
 
 

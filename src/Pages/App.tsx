@@ -3,6 +3,7 @@ import Footer from "../Components/Footer/Footer";
 import Header from "../Components/Header/Header"
 import MessageBoard from "../Components/MessageBoard/MessageBoard";
 import Button from "../Components/Button/Button";
+import Form from "../Components/Form/Form";
 
 const App = () => {
   return (
@@ -11,8 +12,9 @@ const App = () => {
       <section className='flex flex-col mb-20'>
         <MessageBoard />
       </section>
+      <Form />
     <Footer />
-    <Button />
+    <Button type='edit'/>
     </>
   );
 }

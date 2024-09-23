@@ -6,7 +6,7 @@ import { useEffect } from "react";
 
 const MessageBoard = () => {  
     const {messageStore} = useStore();
-    const {messages,isLoading} = messageStore;
+    const {messages,isLoading, editMode} = messageStore;
     useEffect(() => {
         messageStore.getMessages();
       },[]); 
@@ -15,16 +15,17 @@ const MessageBoard = () => {
     <>
             {messages.length <= 0 ? (
             <>
-            <section className='w-dvw px-5 grid min-h-dvh'>
-                <h1 className='font-medium text-2xl text-center' >{isLoading ? 'Laddar...' : 'Du har inga meddelanden att visa!'}</h1>            
-            </section>
-            </>) : 
-            (<>
-            <section className='w-dvw px-5 grid'>
-                {messages.map(message => (  
-                    <Message key={message.id} message={message} writable={false} />))}
-            </section>
+                <section className={`w-dvw min-h-dvh`}>
+                    <h1 className='absolute px-10 bottom-1/2 font-medium text-2xl text-center' >{isLoading ? 'Laddar...' : 'Du har inga meddelanden att visa!'}</h1>            
+                </section>
+                </>) : 
+                (<>
+                <section className={`w-dvw px-5 mt-10 grid`}>
+                    {messages.map(message => (  
+                        <Message key={message.id} message={message} />))}
+                </section>
             </>) }
+
     </>);
 }
 

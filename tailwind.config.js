@@ -10,6 +10,7 @@ export default {
         'blue-wave': '#00B2FFCC',
         'white-wave': '#FFFFFF33',
         'app-bg': '#19274A',
+        'app-bg-tint': '#19274A88',
         'app-btn': '#EF4343'
       },
       fontFamily: {
@@ -23,6 +24,9 @@ export default {
       height: {
         '50px': '50px'
 
+      },
+      gridTemplateRows:{
+          'form': '14fr 2fr 2fr 1fr'
       },
       skew:{
         '45': '45deg'

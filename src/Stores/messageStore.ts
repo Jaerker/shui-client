@@ -25,4 +25,14 @@ export default class MessageStore {
         this.messages = await agent.Messages.list();;
         this.setIsLoading(false);
     };
+
+    handlePublishClicked = (event: any) => {
+        this.setIsLoading(true);
+        event.preventDefault();
+        setTimeout(() => {
+            this.setIsLoading(false);
+        }, 1000);
+
+    }
+
 }
