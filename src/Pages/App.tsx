@@ -1,23 +1,20 @@
+import { observer } from "mobx-react-lite";
 import Footer from "../Components/Footer/Footer";
 import Header from "../Components/Header/Header"
 import MessageBoard from "../Components/MessageBoard/MessageBoard";
-import { useStore } from "../Stores/store";
+import Button from "../Components/Button/Button";
 
-function App() {
-
-  const {messageStore} = useStore();
-
+const App = () => {
   return (
     <>
       <Header/>
-      <section className='flex flex-col items-center justify-center h-dvh'>
-      <h1>{messageStore.title}</h1>
-      <MessageBoard />
-    </section>
+      <section className='flex flex-col mb-20'>
+        <MessageBoard />
+      </section>
     <Footer />
-    
+    <Button />
     </>
   );
 }
 
-export default App
+export default observer(App);

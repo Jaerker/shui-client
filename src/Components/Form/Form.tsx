@@ -5,5 +5,4 @@ const Form = () => {
         </article>
     );
 }
-
 export default Form;

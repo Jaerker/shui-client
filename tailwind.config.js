@@ -17,7 +17,15 @@ export default {
       },
       width: {
         'blue-waves':'600px',
-        'white-waves': '800px'
+        'white-waves': '800px',
+        '50px': '50px'
+      },
+      height: {
+        '50px': '50px'
+
+      },
+      skew:{
+        '45': '45deg'
       }
     },
   },

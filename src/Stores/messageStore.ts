@@ -1,16 +1,28 @@
-import { action, makeObservable, observable } from "mobx";
+import { makeAutoObservable } from "mobx";
+import agent from "../Utils/agent";
+import MessageModel from "../Models/MessageModel";
 
 export default class MessageStore {
-    title = 'Well hello there!';
+    title = 'Well hello there!!';
+    editMode = false;
+    isLoading = false;
 
     constructor() {
-        makeObservable(this, {
-            title: observable,
-            getMessages: action
-        })
+        makeAutoObservable(this);
+    };
+
+    messages: MessageModel[] = [];
+
+    setIsLoading = (state: boolean) => {
+        this.isLoading = state;
+    }
+    toggleEditMode = () => {
+        this.editMode = !this.editMode;
     }
 
-    getMessages = () => {
-        
-    }
+    getMessages = async () => {
+        this.setIsLoading(true);
+        this.messages = await agent.Messages.list();;
+        this.setIsLoading(false);
+    };
 }
