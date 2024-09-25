@@ -4,17 +4,19 @@ import Header from "../Components/Header/Header"
 import MessageBoard from "../Components/MessageBoard/MessageBoard";
 import Button from "../Components/Button/Button";
 import Form from "../Components/Form/Form";
+import LoadingSpinner from "../Components/LodaingSpinner/LoadingSpinner";
 
 const App = () => {
   return (
     <>
       <Header/>
-      <section className='flex flex-col mb-20'>
+      <section className='flex flex-col mb-20 mt-10'>
         <MessageBoard />
       </section>
       <Form />
     <Footer />
     <Button type='edit'/>
+    <LoadingSpinner />
     </>
   );
 }

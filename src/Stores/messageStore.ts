@@ -1,4 +1,4 @@
-import { makeAutoObservable } from "mobx";
+import { makeAutoObservable, runInAction } from "mobx";
 import agent from "../Utils/agent";
 import MessageModel from "../Models/MessageModel";
 
@@ -20,7 +20,7 @@ export default class MessageStore {
     constructor() {
         makeAutoObservable(this);
     };
-
+    
 
     setIsLoading = (state: boolean) => {
         this.isLoading = state;
@@ -53,7 +53,6 @@ export default class MessageStore {
                 updatedAt:''
             };
         }
-        console.log(this.chosenMessage.id)
         this.setIsLoading(false);
     }
     
@@ -68,7 +67,11 @@ export default class MessageStore {
 
     getMessages = async () => {
         this.setIsLoading(true);
-        this.messages = await agent.Messages.list();
+        
+        const response = await agent.Messages.list();
+        runInAction(() => {
+            this.messages = response;
+        })
         this.sortMessages();
 
         this.setIsLoading(false);
@@ -84,12 +87,16 @@ export default class MessageStore {
 
     deleteMessage = async () => {
         this.setIsLoading(true);
-        await agent.Messages.update(this.chosenMessage.id, this.chosenMessage);
+        await agent.Messages.delete(this.chosenMessage.id);
+        runInAction(() => {
+            this.messages = this.messages.filter((message) => message.id!== this.chosenMessage.id);
+        });
         this.setIsLoading(false);
     }
 
     sortMessages = (sortString = 'createdAt-desc') => {
         const [sortKey, sortOrder] = sortString.split('-');
+        runInAction(()=>{
         switch(sortKey.toLowerCase()){
             case 'createdAt':
             default:
@@ -103,13 +110,14 @@ export default class MessageStore {
                     this.messages  = this.messages.sort((x,y) => x.updatedAt > y.updatedAt ? -1 : 1 );
                 else
                     this.messages  = this.messages.sort((x,y) => x.updatedAt < y.updatedAt ? -1 : 1 );
-        }
+            }
+        })
     }
 
     handleSubmit = async (event: any) => {
         event.preventDefault();
         this.setIsLoading(true);
-        if(this.chosenMessage.id){
+        if(this.chosenMessage.id === ''){
             await agent.Messages.create({text: this.chosenMessage.text, username: this.chosenMessage.username});
         }
         else{
@@ -131,8 +139,8 @@ export default class MessageStore {
             };
         else
             this.chosenMessage = message;
-
-
     }
+
+    
 
 }

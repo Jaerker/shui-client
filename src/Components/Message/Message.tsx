@@ -41,8 +41,7 @@ const Message = ({message}: Props) => {
     const [isFocused, setIsFocused] = useState(false);
     const [menuOpen, setMenuOpen] = useState(false);
     const {messageStore} = useStore();
-    const {chosenMessage, handleMessageClickedInMessageBoard, toggleEditMode} = messageStore;
-
+    const {chosenMessage, handleMessageClickedInMessageBoard, toggleEditMode, deleteMessage} = messageStore;
 
     const convertDateAndTime = (ISODateString: string) => {
         const separatedDate  = new Date(ISODateString).toLocaleString().split(/[: -]/);
@@ -54,7 +53,6 @@ const Message = ({message}: Props) => {
     const minimizedCharacterLimit = 150;
     const minimizedLineLimit = 1;
     let charCounter = 0;
-    // console.log(convertedMessage);
     useEffect(()=> {
         convertDateAndTime(message.createdAt);
     }, []);
@@ -64,6 +62,16 @@ const Message = ({message}: Props) => {
             setMenuOpen(false);
     },[chosenMessage]);
 
+
+    const confirmDeletion = async () => {
+        if(window.confirm('Tryck på OK om du är säker på att du vill ta bort anteckningen.')){
+            await deleteMessage();
+            console.log('kommer jag hit?')
+        }
+        else{
+            setMenuOpen(false);
+        }
+    }
     return (
         <article className={`relative my-7 transition duration-300 ${chosenMessage.id === message.id ? 'scale-105' : ' '}`}>
                 {isFocused && (<><button className={`absolute top-5 w-12 h-5 right-2 flex justify-center items-center`} onClick={()=>setMenuOpen(!menuOpen)}>
@@ -73,7 +81,7 @@ const Message = ({message}: Props) => {
                 </button>
                 <ul className ={`grid items-center transition-all duration-300 absolute top-6 right-0 text-black m-5 bg-white overflow-hidden  ${menuOpen ? 'h-82px border':'h-0'}`}>
                     <li className='p-2 border-b'><button onClick={() => {toggleEditMode(message)} }>Ändra</button></li>
-                    <li className='p-2 border-b'><button>Ta bort</button></li>
+                    <li className='p-2 border-b'><button onClick={confirmDeletion}>Ta bort</button></li>
                 </ul>
                 </>
                 )}

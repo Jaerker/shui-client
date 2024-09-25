@@ -2,11 +2,11 @@ import { createContext, useContext } from "react";
 import MessageStore from "./messageStore";
 
 type Store = {
-    messageStore: MessageStore
+    messageStore: MessageStore,
 }
 
 export const store: Store = {
-    messageStore: new MessageStore()
+    messageStore: new MessageStore(),
 }
 
 export const StoreContext = createContext(store);

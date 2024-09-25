@@ -24,8 +24,8 @@ export default {
       height: {
         '50px': '50px',
         '82px':'82px',
-        'focus': 'calc-size(auto)'
-
+        'focus': 'calc-size(auto)',
+        'message-board-when-popup-focused': 'calc(100vh - 5rem)'
       },
       gridTemplateRows:{
           'form': '14fr 2fr 2fr 1fr'
