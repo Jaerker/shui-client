@@ -6,10 +6,10 @@ import { useEffect } from "react";
 
 const MessageBoard = () => {  
     const {messageStore} = useStore();
-    const {messages,isLoading, editMode} = messageStore;
+    const {getMessages, messages,isLoading} = messageStore;
     useEffect(() => {
-        messageStore.getMessages();
-      },[]); 
+        getMessages();
+      }, []); 
 
     return (
     <>
@@ -20,7 +20,7 @@ const MessageBoard = () => {
                 </section>
                 </>) : 
                 (<>
-                <section className={`w-dvw px-5 mt-10 grid`}>
+                <section className={`w-dvw px-5 mt-10 pt-3 grid`}>
                     {messages.map(message => (  
                         <Message key={message.id} message={message} />))}
                 </section>

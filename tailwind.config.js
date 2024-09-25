@@ -22,7 +22,9 @@ export default {
         '50px': '50px'
       },
       height: {
-        '50px': '50px'
+        '50px': '50px',
+        '82px':'82px',
+        'focus': 'calc-size(auto)'
 
       },
       gridTemplateRows:{
