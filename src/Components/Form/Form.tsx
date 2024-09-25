@@ -17,7 +17,7 @@ const Form = () => {
                     <img className='select-none absolute right-0 -bottom-8 -z-10' src={MessageBottomPart} alt='bottom part of message' />
                 </section>
                 <input required onChange={handleFormChange} name='username' type='text' value={chosenMessage.username} className={`italic mt-10 p-3 rounded-sm w-full bg-app-bg border border-white ${isLoading ? 'pointer-events-none text-gray-500' : ''}`} placeholder='Användarnamn'/>
-                <Button type='publish' content={chosenMessage.id === '' ? 'Publicera': 'Ändra' } />
+                <Button type='publish' content={chosenMessage.id ? 'Ändra': 'Publicera' } />
 
             </form>
             

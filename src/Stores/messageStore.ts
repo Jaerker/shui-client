@@ -80,6 +80,7 @@ export default class MessageStore {
         this.setIsLoading(false);
         
     }
+    
 
     deleteMessage = async () => {
         this.setIsLoading(true);
@@ -108,9 +109,13 @@ export default class MessageStore {
     handleSubmit = async (event: any) => {
         event.preventDefault();
         this.setIsLoading(true);
+        if(this.chosenMessage.id){
+            await agent.Messages.create({text: this.chosenMessage.text, username: this.chosenMessage.username});
+        }
+        else{
+            await agent.Messages.update(this.chosenMessage.id, this.chosenMessage);
+        }
 
-        let response = await agent.Messages.create({text: this.chosenMessage.text, username: this.chosenMessage.username});
-        console.log('response: ' + response);
         this.toggleEditMode();
         this.getMessages();
     }
