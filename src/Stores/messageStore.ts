@@ -3,11 +3,8 @@ import agent from "../Utils/agent";
 import MessageModel from "../Models/MessageModel";
 
 export default class MessageStore {
-    title = 'Well hello there!!';
-    editMode = false;
-    isLoading = false;
-
     messages: MessageModel[] = [];
+    
 
     chosenMessage: MessageModel = {
         id: '',
@@ -16,15 +13,64 @@ export default class MessageStore {
         createdAt: '',
         updatedAt:''
     };
+    
+    editMode = false;
+    sortMode = false;
+    searchMode = false
+    
+    isLoading = false;
+    
+    sortString = '';
+    searchValue = '';
 
     constructor() {
         makeAutoObservable(this);
     };
-    
 
     setIsLoading = (state: boolean) => {
         this.isLoading = state;
     }
+
+    setSortString = (value:string) => {
+        this.sortString = value;
+        this.sortMessages();
+    }
+    setSearchValue = (value:string) => {
+        this.searchValue = value;
+    }
+    
+    getMessages = async () => {
+        this.setIsLoading(true);
+        
+        const response = await agent.Messages.list();
+        runInAction(() => {
+            this.messages = response;
+        })
+
+        this.setIsLoading(false);
+    };
+
+    editMessage = async () => {
+        this.setIsLoading(true);
+        await agent.Messages.update(this.chosenMessage.id, this.chosenMessage);
+        this.setIsLoading(false);
+        
+    }
+
+    deleteMessage = async () => {
+        this.setIsLoading(true);
+        setTimeout(()=> {
+            if(window.confirm('Tryck på OK om du är säker på att du vill ta bort anteckningen.')){
+                agent.Messages.delete(this.chosenMessage.id);
+                runInAction(() => {
+                    this.messages = this.messages.filter((message) => message.id!== this.chosenMessage.id);
+                });            
+            }
+        }, 150)
+        
+        this.setIsLoading(false);
+    }
+
 
     toggleEditMode = async (message?: MessageModel | undefined) => {
         this.setIsLoading(true);
@@ -65,54 +111,67 @@ export default class MessageStore {
         };
     }
 
-    getMessages = async () => {
-        this.setIsLoading(true);
-        
-        const response = await agent.Messages.list();
-        runInAction(() => {
-            this.messages = response;
-        })
-        this.sortMessages();
-
-        this.setIsLoading(false);
-    };
-
-    editMessage = async () => {
-        this.setIsLoading(true);
-        await agent.Messages.update(this.chosenMessage.id, this.chosenMessage);
-        this.setIsLoading(false);
-        
-    }
     
+    toggleSortMode = () => this.sortMode =!this.sortMode;
 
-    deleteMessage = async () => {
-        this.setIsLoading(true);
-        await agent.Messages.delete(this.chosenMessage.id);
-        runInAction(() => {
-            this.messages = this.messages.filter((message) => message.id!== this.chosenMessage.id);
-        });
-        this.setIsLoading(false);
-    }
-
-    sortMessages = (sortString = 'createdAt-desc') => {
-        const [sortKey, sortOrder] = sortString.split('-');
+    sortMessages = () => {
+        const [sortKey, sortOrder] = this.sortString.split('-');
         runInAction(()=>{
-        switch(sortKey.toLowerCase()){
+        switch(sortKey){
             case 'createdAt':
-            default:
-                if(sortOrder === 'asc')
-                    this.messages = this.messages.sort((x,y) => x.createdAt > y.createdAt ?  1 : -1 );
-                else
+                default:
+                    if(sortOrder === 'asc'){
                     this.messages = this.messages.sort((x,y) => x.createdAt < y.createdAt ?  1 : -1 );
-               break;
+                }
+                else{
+                    this.messages = this.messages.sort((x,y) => x.createdAt > y.createdAt ?  1 : -1 );
+                }
+                    break;
             case 'updatedAt':
-                if(sortOrder === 'asc')
+                if(sortOrder === 'asc'){
                     this.messages  = this.messages.sort((x,y) => x.updatedAt > y.updatedAt ? -1 : 1 );
-                else
+                }
+                else{
                     this.messages  = this.messages.sort((x,y) => x.updatedAt < y.updatedAt ? -1 : 1 );
+                }
             }
-        })
+
+        });
     }
+
+    toggleSearchMode = () => this.searchMode = !this.searchMode;
+
+    handleSearchChange = (event: any) => {
+        const {value} = event.target;
+        runInAction(()=>{
+            this.searchValue = value;
+        });
+    }
+    handleSearchSubmit = async (event:any) => {
+        event.preventDefault();
+        if(this.searchMode){
+            if(this.searchValue === ''){
+                this.getMessages();
+                
+            }
+            else{
+                const newList: MessageModel[] = await agent.Messages.list();
+
+                runInAction(() => {
+                    this.messages = newList.filter(x => x.username.includes(this.searchValue) || x.text.includes(this.searchValue));
+                });
+    
+            }
+
+        }
+        else{
+            if(this.searchValue !== ''){
+                this.sortMessages();
+            }
+        }
+        this.toggleSearchMode();
+    }
+
 
     handleSubmit = async (event: any) => {
         event.preventDefault();

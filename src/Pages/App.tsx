@@ -2,7 +2,6 @@ import { observer } from "mobx-react-lite";
 import Footer from "../Components/Footer/Footer";
 import Header from "../Components/Header/Header"
 import MessageBoard from "../Components/MessageBoard/MessageBoard";
-import Button from "../Components/Button/Button";
 import Form from "../Components/Form/Form";
 import LoadingSpinner from "../Components/LodaingSpinner/LoadingSpinner";
 
@@ -14,9 +13,8 @@ const App = () => {
         <MessageBoard />
       </section>
       <Form />
-    <Footer />
-    <Button type='edit'/>
-    <LoadingSpinner />
+      <Footer />
+      <LoadingSpinner />
     </>
   );
 }

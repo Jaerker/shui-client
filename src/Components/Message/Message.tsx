@@ -38,6 +38,7 @@ const Month = [
 const Message = ({message}: Props) => {
     
     const [createdDate, setCreatedDate]  = useState('');
+    const [updatedDate, setUpdatedDate]  = useState('');
     const [isFocused, setIsFocused] = useState(false);
     const [menuOpen, setMenuOpen] = useState(false);
     const {messageStore} = useStore();
@@ -45,17 +46,20 @@ const Message = ({message}: Props) => {
 
     const convertDateAndTime = (ISODateString: string) => {
         const separatedDate  = new Date(ISODateString).toLocaleString().split(/[: -]/);
-        setCreatedDate(`${Day[new Date(ISODateString).getDay()]} ${separatedDate[2]} ${Month[parseInt(separatedDate[1])-1]}, ${separatedDate[3]}:${separatedDate[4]}${new Date().getFullYear() === new Date(ISODateString).getFullYear() ? '' : ', ' + separatedDate[0] }`);
+        return `${Day[new Date(ISODateString).getDay()]} ${separatedDate[2]} ${Month[parseInt(separatedDate[1])-1]}, ${separatedDate[3]}:${separatedDate[4]}${new Date().getFullYear() === new Date(ISODateString).getFullYear() ? '' : ', ' + separatedDate[0] }`;
     }
 
     
     const convertedMessage = message.text.split('\n').filter(x => x !== '');
     const minimizedCharacterLimit = 150;
-    const minimizedLineLimit = 1;
+    const minimizedLineLimit = 2;
     let charCounter = 0;
+
     useEffect(()=> {
-        convertDateAndTime(message.createdAt);
+        setCreatedDate(convertDateAndTime(message.createdAt));
+        setUpdatedDate(convertDateAndTime(message.updatedAt));
     }, []);
+
     useEffect(() => {
         setIsFocused(chosenMessage.id === message.id);
         if(chosenMessage.id !== message.id)
@@ -63,26 +67,19 @@ const Message = ({message}: Props) => {
     },[chosenMessage]);
 
 
-    const confirmDeletion = async () => {
-        if(window.confirm('Tryck på OK om du är säker på att du vill ta bort anteckningen.')){
-            await deleteMessage();
-            console.log('kommer jag hit?')
-        }
-        else{
-            setMenuOpen(false);
-        }
-    }
+
     return (
-        <article className={`relative my-7 transition duration-300 ${chosenMessage.id === message.id ? 'scale-105' : ' '}`}>
-                {isFocused && (<><button className={`absolute top-5 w-12 h-5 right-2 flex justify-center items-center`} onClick={()=>setMenuOpen(!menuOpen)}>
-                    <section className='mr-1 bg-gray-400 w-1.5 h-1.5 rounded-xl'></section>
-                    <section className='mr-1 bg-gray-400 w-1.5 h-1.5 rounded-xl'></section>
-                    <section className='mr-1 bg-gray-400 w-1.5 h-1.5 rounded-xl'></section>
-                </button>
-                <ul className ={`grid items-center transition-all duration-300 absolute top-6 right-0 text-black m-5 bg-white overflow-hidden  ${menuOpen ? 'h-82px border':'h-0'}`}>
-                    <li className='p-2 border-b'><button onClick={() => {toggleEditMode(message)} }>Ändra</button></li>
-                    <li className='p-2 border-b'><button onClick={confirmDeletion}>Ta bort</button></li>
-                </ul>
+        <li className={`relative my-7 transition duration-300 ${chosenMessage.id === message.id ? 'scale-105' : ' '}`}>
+                {isFocused && (<>
+                    <button className={`absolute top-5 w-12 h-5 right-2 flex justify-center items-center`} onClick={()=>setMenuOpen(!menuOpen)}>
+                        <section className='mr-1 bg-gray-400 w-1.5 h-1.5 rounded-xl'></section>
+                        <section className='mr-1 bg-gray-400 w-1.5 h-1.5 rounded-xl'></section>
+                        <section className='mr-1 bg-gray-400 w-1.5 h-1.5 rounded-xl'></section>
+                    </button>
+                    <ul className ={`grid items-center transition-all duration-300 absolute top-6 right-0 text-black m-5 bg-white overflow-hidden  ${menuOpen ? 'h-82px border':'h-0'}`}>
+                        <li className='p-2 border-b'><button onClick={() => {toggleEditMode(message)} }>Ändra</button></li>
+                        <li className='p-2 border-b'><button onClick={deleteMessage}>Ta bort</button></li>
+                    </ul>
                 </>
                 )}
                 
@@ -97,25 +94,34 @@ const Message = ({message}: Props) => {
                     ) : (
                     <>
                         {convertedMessage.map((x, i)  => {
-                            charCounter += x.length;
-                            if(i > minimizedLineLimit)
-                                return <p key={x} className='pt-3 font-semibold text-gray-500'>{`...`}</p>
-                            else{
+
+                            if(i < minimizedLineLimit){
+                                if(i === minimizedLineLimit)
+                                    return <p key={x} className='pt-3 font-semibold text-gray-500'>{`...`}</p>
+                                charCounter += x.length;
+                        
                                 if(charCounter > minimizedCharacterLimit){
                                     return <p key={x} className={`pt-5 font-medium`}>{`${x.slice(0, charCounter-minimizedCharacterLimit-3)}`}<span className='pt-3 font-semibold text-gray-500'>...</span></p>    
                                 }
+                                return <p key={x} className={`${i === 0 ? 'pt-5 pb-2' : 'py-2'} font-medium`}>{x}</p>
                             }
-        
-                            return <p key={x} className={`${i === 0 ? 'pt-5 pb-2' : 'py-2'} font-medium`}>{x}</p>
                         })}
                     </>
-                    
                 )}
-                
-                <h2 className='select-none font-bold italic pt-5 before:inline-block before:content-[""] before:border before:border-black before:w-4 before:mr-1 before:-translate-y-1'>{message.username}</h2>
+                <section className='flex justify-between items-end'>
+                    <h2 className='select-none font-bold italic pt-5 before:inline-block before:content-[""] before:border before:border-black before:w-4 before:mr-1 before:-translate-y-1'>{message.username}</h2>
+                    {updatedDate !== createdDate && (<>
+                    {isFocused ? (<>
+                        <p className='select-none text-sm italic text-gray-500 font-semibold'>Uppdaterades {updatedDate}</p>
+                    </>) : (<>
+                        <p className='border rounded-xl w-6 h-6 text-center text-white bg-gray-500 font-bold'>!</p>
+                    </>)}
+
+                    </>)}
+                </section>
             </section>
             <img className='select-none absolute right-0' src={MessageBottomPart} alt='bottom part of message' />
-        </article>);
+        </li>);
 }
 
 export default observer(Message);

@@ -9,7 +9,7 @@ const Form = () => {
     const {chosenMessage, editMode, isLoading, handleFormChange, handleSubmit} = messageStore;
 
     return (<>
-        <article className={`bg-app-bg border border-white-wave fixed transition duration-300 top-0 w-dvw h-dvh  ${editMode ? `opacity-1 ${isLoading ? 'blur-sm' : ''}` : 'opacity-0 pointer-events-none'}`}>
+        <article className={`bg-app-bg border border-white-wave fixed transition duration-300 top-0 w-full max-w-xl h-dvh  ${editMode ? `opacity-1 ${isLoading ? 'blur-sm' : ''}` : 'opacity-0 pointer-events-none'}`}>
             <form className={`w-full h-full pt-20 px-5 rounded grid grid-rows-form gap-4`} onSubmit={handleSubmit}>
 
                 <section className='relative bg-white text-black flex flex-col'>

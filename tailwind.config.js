@@ -19,13 +19,15 @@ export default {
       width: {
         'blue-waves':'600px',
         'white-waves': '800px',
-        '50px': '50px'
+        '50px': '50px',
+        'filter-active':'65dvw',
+        'search-active':'80dvw',
+        'btn':'2.6rem'
       },
       height: {
         '50px': '50px',
         '82px':'82px',
-        'focus': 'calc-size(auto)',
-        'message-board-when-popup-focused': 'calc(100vh - 5rem)'
+        'filter-active':'20dvh'
       },
       gridTemplateRows:{
           'form': '14fr 2fr 2fr 1fr'
