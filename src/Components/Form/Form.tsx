@@ -1,7 +1,7 @@
-import { useStore } from "../../Stores/store";
+import { useStore } from '../../Stores/store';
 import MessageBottomPart from '../../Assets/message-bottom-part.svg';
-import { observer } from "mobx-react-lite";
-import Button from "../Button/Button";
+import { observer } from 'mobx-react-lite';
+import Button from '../Button/Button';
 
 const Form = () => {
 
