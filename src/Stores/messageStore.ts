@@ -1,6 +1,6 @@
-import { makeAutoObservable, runInAction } from "mobx";
-import agent from "../Utils/agent";
-import MessageModel from "../Models/MessageModel";
+import { makeAutoObservable, runInAction } from 'mobx';
+import agent from '../Utils/agent';
+import MessageModel from '../Models/MessageModel';
 
 export default class MessageStore {
     messages: MessageModel[] = [];
@@ -20,7 +20,7 @@ export default class MessageStore {
     
     isLoading = false;
     
-    sortString = '';
+    sortString = 'createdAt-asc';
     searchValue = '';
 
     constructor() {
@@ -35,6 +35,7 @@ export default class MessageStore {
         this.sortString = value;
         this.sortMessages();
     }
+
     setSearchValue = (value:string) => {
         this.searchValue = value;
     }
@@ -45,8 +46,9 @@ export default class MessageStore {
         const response = await agent.Messages.list();
         runInAction(() => {
             this.messages = response;
-        })
+            this.sortMessages();
 
+        })
         this.setIsLoading(false);
     };
 
@@ -54,7 +56,6 @@ export default class MessageStore {
         this.setIsLoading(true);
         await agent.Messages.update(this.chosenMessage.id, this.chosenMessage);
         this.setIsLoading(false);
-        
     }
 
     deleteMessage = async () => {
@@ -110,7 +111,6 @@ export default class MessageStore {
             [name]: value
         };
     }
-
     
     toggleSortMode = () => this.sortMode =!this.sortMode;
 
@@ -119,7 +119,7 @@ export default class MessageStore {
         runInAction(()=>{
         switch(sortKey){
             case 'createdAt':
-                default:
+            default:
                     if(sortOrder === 'asc'){
                     this.messages = this.messages.sort((x,y) => x.createdAt < y.createdAt ?  1 : -1 );
                 }
@@ -158,7 +158,7 @@ export default class MessageStore {
                 const newList: MessageModel[] = await agent.Messages.list();
 
                 runInAction(() => {
-                    this.messages = newList.filter(x => x.username.includes(this.searchValue) || x.text.includes(this.searchValue));
+                    this.messages = newList.filter(x => x.username.includes(this.searchValue.toLowerCase()) || x.text.includes(this.searchValue.toLowerCase()));
                 });
     
             }

@@ -53,7 +53,7 @@ const Button = ({type, content}: Props) => {
     
                     <section className={`transition-all duration-300 bg-app-btn overflow-hidden ${searchMode ? 'w-full ' : 'w-0 h-0'}`}>
                         <form className='p-2 w-full flex flex-col gap-1' onSubmit={handleSearchSubmit} >
-                            <label htmlFor="username">Sök efter användare</label>
+                            <label htmlFor='username'>Sök efter användare eller ord i text</label>
                             <input required type='text' className='rounded text-black p-2 w-full' name='username' placeholder='användarnamn' value={searchValue} onChange={handleSearchChange} />    
                         </form>
                     </section>            
@@ -73,8 +73,8 @@ const Button = ({type, content}: Props) => {
                     <section className={`transition-all duration-300 grid h-20`}>
                         <label htmlFor='filter' className='text-center'>Sortera efter</label>
                         <select name='filter' id='filter' defaultValue='createdAt-asc' className='text-black rounded' onChange={handleSortChanged}>
-                            <option id='createdAt-asc'  value='createdAt-asc'>Datum - Stigande</option>
-                            <option id='createdAt-desc' value='createdAt-desc'>Datum - Fallande</option>
+                            <option id='createdAt-asc'  value='createdAt-asc'>Datum - Nyaste</option>
+                            <option id='createdAt-desc' value='createdAt-desc'>Datum - Äldst</option>
                         </select>
                     </section>
                 </form>

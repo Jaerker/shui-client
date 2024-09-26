@@ -1,5 +1,5 @@
-import { createContext, useContext } from "react";
-import MessageStore from "./messageStore";
+import { createContext, useContext } from 'react';
+import MessageStore from './messageStore';
 
 type Store = {
     messageStore: MessageStore,

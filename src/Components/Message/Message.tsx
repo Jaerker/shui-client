@@ -1,8 +1,8 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState } from 'react';
 import MessageModel from '../../Models/MessageModel';
 import MessageBottomPart from '../../Assets/message-bottom-part.svg';
-import { useStore } from "../../Stores/store";
-import { observer } from "mobx-react-lite";
+import { useStore } from '../../Stores/store';
+import { observer } from 'mobx-react-lite';
 
 type Props = {
     key: string,
